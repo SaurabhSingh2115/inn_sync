@@ -46,3 +46,5 @@ Inn Sync is a user friendly project that addresses the challenge of effectively 
 - Dark mode.
 
   - Users are able to switch between Light and Dark Mode.
+
+### API Documentation:- https://documenter.getpostman.com/view/32409759/2s9YymHkUC

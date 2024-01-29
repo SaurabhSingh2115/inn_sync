@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 4000;
+const PORT = process.env.PORT || 4000;
 
 // Middleware to parse JSON body in requests
 app.use(express.json());
@@ -423,6 +423,6 @@ app.get("/darkmode", (req, res) => {
 
 // app.put("/darkMode", userController.toggleDarkMode);
 
-app.listen(port, () => {
-  console.log(`Inn Sync listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Inn Sync listening at http://localhost:${PORT}`);
 });

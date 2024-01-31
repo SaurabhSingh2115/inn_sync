@@ -48,3 +48,5 @@ Inn Sync is a user friendly project that addresses the challenge of effectively 
   - Users are able to switch between Light and Dark Mode.
 
 ### API Documentation:- https://documenter.getpostman.com/view/32409759/2s9YymHkUC
+
+### Netlify deployment link:- https://inn-sync.netlify.app/

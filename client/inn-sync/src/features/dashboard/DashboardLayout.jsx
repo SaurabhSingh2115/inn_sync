@@ -20,7 +20,9 @@ function DashboardLayout() {
       <div>Statistics</div>
       <div>Today's activity</div>
       <div>Chart stay durations</div>
-      <SalesChart />
+      <>
+        <SalesChart />
+      </>
     </StyledDashboardLayout>
   );
 }

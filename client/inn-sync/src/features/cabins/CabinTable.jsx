@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 import CabinRow from "./CabinRow";
 import cabinImage1 from "../../data/cabins/cabin-001.jpg";
 import cabinImage2 from "../../data/cabins/cabin-002.jpg";

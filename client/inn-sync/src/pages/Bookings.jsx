@@ -9,6 +9,10 @@ const Table = styled.div`
   background-color: var(--color-grey-0);
   border-radius: 7px;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 `;
 
 const TableHeader = styled.header`
@@ -23,6 +27,12 @@ const TableHeader = styled.header`
   font-weight: 600;
   color: var(--color-grey-600);
   padding: 1.6rem 2.4rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    row-gap: 1rem;
+    padding: 1rem;
+  }
 `;
 
 const TableRow = styled.div`
@@ -32,6 +42,16 @@ const TableRow = styled.div`
   align-items: center;
   padding: 1.6rem 2.4rem;
   border-bottom: 1px solid var(--color-grey-100);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    row-gap: 1rem;
+    padding: 1rem;
+
+    /* & div:nth-child(3) {
+      text-align: left;
+    } */
+  }
 `;
 
 const Cabin = styled.div`
@@ -39,6 +59,10 @@ const Cabin = styled.div`
   font-weight: 600;
   color: var(--color-grey-600);
   font-family: "Sono";
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const Stacked = styled.div`

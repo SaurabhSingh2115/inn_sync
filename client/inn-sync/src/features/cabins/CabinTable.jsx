@@ -34,8 +34,6 @@ const TableHeader = styled.header`
   padding: 1.6rem 2.4rem;
 `;
 
-// import CabinRow from "./CabinRow"; // make sure to import CabinRow
-
 function CabinTable() {
   // Replace this with your actual data
   const cabins = [

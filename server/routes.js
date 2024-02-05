@@ -1,6 +1,17 @@
 const express = require("express");
 const app = express();
+
+const connectDB = require("./db/connect");
 const PORT = process.env.PORT || 4000;
+
+// Connect to the MongoDB database
+connectDB()
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Failed to connect to MongoDB", error);
+  });
 
 // Middleware to parse JSON body in requests
 app.use(express.json());

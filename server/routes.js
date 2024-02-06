@@ -1,13 +1,44 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const app = express();
 
 const connectDB = require("./db/connect");
 const PORT = process.env.PORT || 4000;
 
+const cabinSchema = new mongoose.Schema({
+  name: String,
+  maxCapacity: Number,
+  regularPrice: Number,
+  discount: Number,
+  description: String,
+});
+
+const guestSchema = new mongoose.Schema({
+  email: String,
+  fullName: String,
+  nationality: String,
+  nationalID: String,
+  countryFlag: String,
+});
+
 // Connect to the MongoDB database
+
+const Cabin = mongoose.model("Cabin", cabinSchema);
+const Guest = mongoose.model("Guest", guestSchema);
+
 connectDB()
-  .then(() => {
+  .then(async () => {
     console.log("Connected to MongoDB");
+
+    // Save cabins to the database
+    for (let cabinData of cabins) {
+      const cabin = new Cabin(cabinData);
+      await cabin.save();
+    }
+    for (let guestData of guests) {
+      const guest = new Guest(guestData);
+      await guest.save();
+    }
   })
   .catch((error) => {
     console.error("Failed to connect to MongoDB", error);
@@ -315,32 +346,35 @@ app.get("/dashboard", (req, res) => {
 });
 
 //Cabins
-
-app.get("/cabins", (req, res) => {
+app.get("/cabins", async (req, res) => {
+  const cabins = await Cabin.find();
   res.json(cabins);
 });
 
-app.get("/cabins/:name", (req, res) => {
-  const cabin = cabins.find((c) => c.name === req.params.name);
+app.get("/cabins/:name", async (req, res) => {
+  const cabin = await Cabin.findOne({ name: req.params.name });
   if (!cabin) res.status(404).send("Cabin not found");
   res.json(cabin);
 });
 
-app.post("/cabins", (req, res) => {
-  const cabin = req.body;
-  cabins.push(cabin);
+app.post("/cabins", async (req, res) => {
+  const cabin = new Cabin(req.body);
+  await cabin.save();
   res.status(201).send(cabin);
 });
 
-app.put("/cabins/:name", (req, res) => {
-  let cabin = cabins.find((c) => c.name === req.params.name);
+app.put("/cabins/:name", async (req, res) => {
+  const cabin = await Cabin.findOneAndUpdate(
+    { name: req.params.name },
+    req.body,
+    { new: true }
+  );
   if (!cabin) res.status(404).send("Cabin not found");
-  cabin = { ...cabin, ...req.body };
   res.json(cabin);
 });
 
-app.delete("/cabins/:name", (req, res) => {
-  cabins = cabins.filter((c) => c.name !== req.params.name);
+app.delete("/cabins/:name", async (req, res) => {
+  await Cabin.findOneAndDelete({ name: req.params.name });
   res.status(204).send();
 });
 
@@ -386,36 +420,49 @@ app.get("/checkOut/:id", (req, res) => {
   res.send(`Check in id is ${req.params.id}`);
 });
 
-//Guests
-
-app.get("/guests", (req, res) => {
+// Guests
+app.get("/guests", async (req, res) => {
+  const guests = await Guest.find();
   res.json(guests);
 });
 
-app.get("/guests/:name", (req, res) => {
-  const guest = guests.find((g) => g.name === req.params.name);
+app.get("/guests/:fullName", async (req, res) => {
+  const guest = await Guest.findOne({ fullName: req.params.fullName });
   if (!guest) res.status(404).send("Guest not found");
   res.json(guest);
 });
 
-app.post("/guests", (req, res) => {
-  const guest = req.body;
-  guests.push(guest);
+app.post("/guests", async (req, res) => {
+  // console.log(req.body);
+  const guest = new Guest(req.body);
+  await guest.save();
   res.status(201).send(guest);
 });
 
-app.put("/guests/:fullName", (req, res) => {
-  let guest = cabins.find((c) => c.fullName === req.params.fullName);
+app.put("/guests/:fullName", async (req, res) => {
+  const guest = await Guest.findOneAndUpdate(
+    { fullName: req.params.fullName },
+    req.body,
+    { new: true }
+  );
   if (!guest) res.status(404).send("Guest not found");
-  guest = { ...guest, ...req.body };
   res.json(guest);
 });
 
-app.delete("/guests/:fullName", (req, res) => {
-  cabins = cabins.filter((g) => g.fullName !== req.params.fullName);
-  res.status(204).send();
+app.patch("/guests/:fullName", async (req, res) => {
+  const guest = await Guest.findOneAndUpdate(
+    { fullName: req.params.fullName },
+    req.body,
+    { new: true }
+  );
+  if (!guest) res.status(404).send("Guest not found");
+  res.json(guest);
 });
 
+app.delete("/guests/:fullName", async (req, res) => {
+  await Guest.findOneAndDelete({ fullName: req.params.fullName });
+  res.status(204).send();
+});
 // Settings and customization
 
 app.get("/settings", (req, res) => {

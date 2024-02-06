@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+const cors = require("cors");
 
 const connectDB = require("./db/connect");
 const PORT = process.env.PORT || 4000;
@@ -21,31 +22,27 @@ const guestSchema = new mongoose.Schema({
   countryFlag: String,
 });
 
+const bookingSchema = new mongoose.Schema({
+  id: String,
+  startDate: Date,
+  endDate: Date,
+  numNights: Number,
+  numGuests: Number,
+  totalPrice: Number,
+  status: String,
+  guests: { fullName: String, email: String },
+  cabins: { name: String },
+});
+
 // Connect to the MongoDB database
 
 const Cabin = mongoose.model("Cabin", cabinSchema);
 const Guest = mongoose.model("Guest", guestSchema);
-
-connectDB()
-  .then(async () => {
-    console.log("Connected to MongoDB");
-
-    // Save cabins to the database
-    for (let cabinData of cabins) {
-      const cabin = new Cabin(cabinData);
-      await cabin.save();
-    }
-    for (let guestData of guests) {
-      const guest = new Guest(guestData);
-      await guest.save();
-    }
-  })
-  .catch((error) => {
-    console.error("Failed to connect to MongoDB", error);
-  });
+const Booking = mongoose.model("Booking", bookingSchema);
 
 // Middleware to parse JSON body in requests
 app.use(express.json());
+app.use(cors());
 
 //In memory database for Cabins
 let cabins = [
@@ -120,6 +117,66 @@ let cabins = [
     // image: imageUrl + "cabin-008.jpg",
     description:
       "Experience the epitome of luxury and grandeur with your large group or multiple families in our grand cabin 008. This cabin offers a lavish retreat that caters to all your needs and desires. The cabin features an opulent design and boasts of high-end finishes, intricate details and the finest quality wood throughout. Inside, the cabin features multiple grand living areas with fireplaces, a formal dining area, and a gourmet kitchen that is a chef's dream. The bedrooms are designed for ultimate comfort and luxury, with plush beds and en-suite spa-inspired bathrooms. Step outside and immerse yourself in the beauty of nature from your private deck, featuring a luxurious hot tub and ample seating areas for ultimate relaxation and enjoyment.",
+  },
+];
+
+//bookings
+
+let bookings = [
+  {
+    id: "1",
+    startDate: "2024-02-07",
+    endDate: "2024-02-12",
+    numNights: 4,
+    numGuests: 2,
+    totalPrice: 1000,
+    status: "checked-in",
+    guests: { fullName: "John Doe", email: "john.doe@gmail.com" },
+    cabins: { name: "Cabin 1" },
+  },
+  {
+    id: "2",
+    startDate: "2024-02-10",
+    endDate: "2024-02-15",
+    numNights: 5,
+    numGuests: 3,
+    totalPrice: 1400,
+    status: "unconfirmed",
+    guests: { fullName: "Jane Smith", email: "jane.smith@gmail.com" },
+    cabins: { name: "Cabin 2" },
+  },
+  {
+    id: "3",
+    startDate: "2024-02-15",
+    endDate: "2024-02-21",
+    numNights: 6,
+    numGuests: 2,
+    totalPrice: 1200,
+    status: "checked-in",
+    guests: { fullName: "Chris Brown", email: "chris.brown@gmail.com" },
+    cabins: { name: "Cabin 3" },
+  },
+  {
+    id: "4",
+    startDate: "2024-02-14",
+    endDate: "2024-02-16",
+    numNights: 2,
+    numGuests: 1,
+    totalPrice: 700,
+    status: "checked-in",
+    guests: { fullName: "William", email: "william@gmail.com" },
+    cabins: { name: "Cabin 4" },
+  },
+  {
+    id: "5",
+    startDate: "2024-02-20",
+    endDate: "2024-02-26",
+    numNights: 5,
+    numGuests: 2,
+    totalPrice: 1400,
+    status: "unconfirmed",
+    guests: { fullName: "Nina", email: "nina@gmail.com" },
+    cabins: { name: "Cabin 5" },
   },
 ];
 
@@ -340,6 +397,42 @@ let guests = [
   },
 ];
 
+//connection
+
+connectDB()
+  .then(async () => {
+    console.log("Connected to MongoDB");
+
+    // Save cabins to the database
+    const existingCabins = await Cabin.find();
+    if (existingCabins.length === 0) {
+      for (let cabinData of cabins) {
+        const cabin = new Cabin(cabinData);
+        await cabin.save();
+      }
+    }
+
+    const existingBookings = await Booking.find();
+    if (existingBookings.length === 0) {
+      for (let bookingData of bookings) {
+        const booking = new Booking(bookingData);
+        await booking.save();
+      }
+    }
+
+    const existingGuests = await Guest.find();
+
+    if (existingGuests.length === 0) {
+      for (let guestData of guests) {
+        const guest = new Guest(guestData);
+        await guest.save();
+      }
+    }
+  })
+  .catch((error) => {
+    console.error("Failed to connect to MongoDB", error);
+  });
+
 // Dashboard
 app.get("/dashboard", (req, res) => {
   res.send("Hello from dashboard");
@@ -378,38 +471,37 @@ app.delete("/cabins/:name", async (req, res) => {
   res.status(204).send();
 });
 
-// Bookings
-// app.get("/bookings", bookingController.getAllBookings);
-// Get all bookings
-app.get("/bookings", (req, res) => {
+//Bookings
+app.get("/bookings", async (req, res) => {
+  const bookings = await Booking.find();
   res.json(bookings);
 });
 
-// Create a new booking
-app.post("/bookings", (req, res) => {
-  const newBooking = req.body;
-  bookings.push(newBooking);
-  res.send("Booking created");
+app.get("/bookings/:id", async (req, res) => {
+  const booking = await Booking.findOne({ id: req.params.id });
+  if (!booking) res.status(404).send("Booking not found");
+  res.json(booking);
 });
 
-// Update an existing booking
-app.put("/bookings/:id", (req, res) => {
-  const bookingId = parseInt(req.params.id);
-  const updatedBooking = req.body;
-  bookings = bookings.map((booking) => {
-    if (booking.cabinId === bookingId) {
-      return { ...booking, ...updatedBooking };
-    }
-    return booking;
-  });
-  res.send(`Booking ${bookingId} updated`);
+app.post("/bookings", async (req, res) => {
+  const booking = new Booking(req.body);
+  await booking.save();
+  res.status(201).send(booking);
 });
 
-// Delete an existing booking
-app.delete("/bookings/:id", (req, res) => {
-  const bookingId = parseInt(req.params.id);
-  bookings = bookings.filter((booking) => booking.cabinId !== bookingId);
-  res.send(`Booking ${bookingId} deleted`);
+app.put("/bookings/:id", async (req, res) => {
+  const booking = await Booking.findOneAndUpdate(
+    { id: req.params.id },
+    req.body,
+    { new: true }
+  );
+  if (!booking) res.status(404).send("Booking not found");
+  res.json(booking);
+});
+
+app.delete("/bookings/:id", async (req, res) => {
+  await Booking.findOneAndDelete({ id: req.params.id });
+  res.status(204).send();
 });
 // Check In/Out
 app.get("/checkIn/:id", (req, res) => {

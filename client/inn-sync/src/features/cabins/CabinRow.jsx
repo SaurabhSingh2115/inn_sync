@@ -42,6 +42,13 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
+const Description = styled.div`
+  font-family: "Sono";
+  font-weight: 500;
+  color: var(--color-grey-600);
+`;
+
+// , description
 function CabinRow({ cabin }) {
   const { name, maxCapacity, regularPrice, discount, image } = cabin;
 
@@ -52,6 +59,7 @@ function CabinRow({ cabin }) {
       <div>Fits upto {maxCapacity} guests</div>
       <Price>{regularPrice}</Price>
       <Discount>{discount}</Discount>
+      {/* <Description>{description}</Description> */}
       <button>Delete</button>
     </TableRow>
   );

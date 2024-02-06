@@ -93,7 +93,7 @@ function Bookings() {
   useEffect(() => {
     // Fetch bookings data from the API
     axios
-      .get("http://localhost:4000/bookings")
+      .get("https://inn-sync-ug12.onrender.com/bookings")
       .then((response) => {
         console.log("Received data:", response.data);
         setBookings(response.data);

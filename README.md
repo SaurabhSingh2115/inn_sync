@@ -50,3 +50,5 @@ Inn Sync is a user friendly project that addresses the challenge of effectively 
 ### API Documentation:- https://documenter.getpostman.com/view/32409759/2s9YymHkUC
 
 ### Netlify deployment link:- https://inn-sync.netlify.app/
+
+### Render deployment link:- https://inn-sync-ug12.onrender.com/

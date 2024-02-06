@@ -1,7 +1,9 @@
+import React, { useState, useEffect } from "react";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import styled from "styled-components";
 import Tag from "../ui/Tag";
+import axios from "axios";
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -86,64 +88,20 @@ const Amount = styled.div`
 `;
 
 function Bookings() {
-  const bookings = [
-    {
-      id: "1",
-      startDate: "2024-02-07",
-      endDate: "2024-02-12",
-      numNights: 4,
-      numGuests: 2,
-      totalPrice: 1000,
-      status: "checked-in",
-      guests: { fullName: "John Doe", email: "john.doe@gmail.com" },
-      cabins: { name: "Cabin 1" },
-    },
-    {
-      id: "2",
-      startDate: "2024-02-10",
-      endDate: "2024-02-15",
-      numNights: 5,
-      numGuests: 3,
-      totalPrice: 1400,
-      status: "unconfirmed",
-      guests: { fullName: "Jane Smith", email: "jane.smith@gmail.com" },
-      cabins: { name: "Cabin 2" },
-    },
-    {
-      id: "3",
-      startDate: "2024-02-15",
-      endDate: "2024-02-21",
-      numNights: 6,
-      numGuests: 2,
-      totalPrice: 1200,
-      status: "checked-in",
-      guests: { fullName: "Chris Brown", email: "chris.brown@gmail.com" },
-      cabins: { name: "Cabin 3" },
-    },
-    {
-      id: "4",
-      startDate: "2024-02-14",
-      endDate: "2024-02-16",
-      numNights: 2,
-      numGuests: 1,
-      totalPrice: 700,
-      status: "checked-in",
-      guests: { fullName: "William", email: "william@gmail.com" },
-      cabins: { name: "Cabin 4" },
-    },
-    {
-      id: "5",
-      startDate: "2024-02-20",
-      endDate: "2024-02-26",
-      numNights: 5,
-      numGuests: 2,
-      totalPrice: 1400,
-      status: "unconfirmed",
-      guests: { fullName: "Nina", email: "nina@gmail.com" },
-      cabins: { name: "Cabin 5" },
-    },
-    // Add more bookings as needed
-  ];
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    // Fetch bookings data from the API
+    axios
+      .get("http://localhost:4000/bookings")
+      .then((response) => {
+        console.log("Received data:", response.data);
+        setBookings(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching bookings:", error);
+      });
+  }, []);
 
   const statusToTagName = {
     unconfirmed: "blue",
@@ -170,11 +128,11 @@ function Bookings() {
 
         {bookings.map((booking) => (
           <TableRow key={booking.id}>
-            <Cabin>{booking.cabins.name}</Cabin>
+            <Cabin>{booking.cabins?.name}</Cabin>
 
             <Stacked>
-              <span>{booking.guests.fullName}</span>
-              <span>{booking.guests.email}</span>
+              <span>{booking.guests?.fullName}</span>
+              <span>{booking.guests?.email}</span>
             </Stacked>
 
             <Stacked>

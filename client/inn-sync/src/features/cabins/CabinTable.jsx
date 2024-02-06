@@ -43,13 +43,18 @@ function CabinTable() {
       regularPrice: 1000,
       discount: 200,
       image: cabinImage1,
+      // description:
+      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
     },
+
     {
       name: "02",
       maxCapacity: 6,
       regularPrice: 1200,
       discount: 300,
       image: cabinImage2,
+      // description:
+      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
     },
     {
       name: "03",
@@ -57,6 +62,8 @@ function CabinTable() {
       regularPrice: 800,
       discount: 100,
       image: cabinImage3,
+      // description:
+      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
     },
     {
       name: "04",
@@ -64,6 +71,8 @@ function CabinTable() {
       regularPrice: 1300,
       discount: 300,
       image: cabinImage4,
+      // description:
+      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
     },
     {
       name: "05",
@@ -71,6 +80,8 @@ function CabinTable() {
       regularPrice: 1400,
       discount: 200,
       image: cabinImage5,
+      // description:
+      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
     },
     {
       name: "06",
@@ -78,6 +89,8 @@ function CabinTable() {
       regularPrice: 1500,
       discount: 500,
       image: cabinImage6,
+      // description:
+      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
     },
     {
       name: "07",
@@ -85,6 +98,8 @@ function CabinTable() {
       regularPrice: 2000,
       discount: 700,
       image: cabinImage7,
+      // description:
+      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
     },
     {
       name: "08",
@@ -92,6 +107,8 @@ function CabinTable() {
       regularPrice: 3000,
       discount: 800,
       image: cabinImage8,
+      // description:
+      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
     },
 
     // add more cabins as needed

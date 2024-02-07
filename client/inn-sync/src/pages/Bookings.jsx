@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import BookingForm from "../features/bookings/BookingForm";
+import Button from "../ui/Button";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import styled from "styled-components";
@@ -89,6 +91,15 @@ const Amount = styled.div`
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
+  const [isBookingFormOpen, setIsBookingFormOpen] = useState(false);
+
+  const openBookingForm = () => {
+    setIsBookingFormOpen(true);
+  };
+
+  const closeBookingForm = () => {
+    setIsBookingFormOpen(false);
+  };
 
   useEffect(() => {
     // Fetch bookings data from the API
@@ -103,10 +114,31 @@ function Bookings() {
       });
   }, []);
 
+  function deleteBooking(id) {
+    if (window.confirm("Are you sure you want to delete this booking?"))
+      axios
+        .delete(`https://inn-sync-ug12.onrender.com/bookings/${id}`)
+        .then((response) => {
+          console.log("Deleted booking:", response.data);
+          // Remove the deleted booking from the state
+          setBookings(bookings.filter((booking) => booking.id !== id));
+        })
+        .catch((error) => {
+          console.error("Error deleting booking:", error);
+        });
+  }
+
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
     "checked-out": "silver",
+  };
+
+  const handleBookingFormSubmit = (event) => {
+    event.preventDefault();
+    // Handle the form submission here
+    // After handling, close the form
+    closeBookingForm();
   };
 
   return (
@@ -166,10 +198,16 @@ function Bookings() {
             </Tag>
 
             <Amount>{`${booking.totalPrice}`}</Amount>
-            <div></div>
+            <div>
+              <Button onClick={() => deleteBooking(booking.id)}>Delete</Button>
+            </div>
           </TableRow>
         ))}
       </Table>
+      <div>
+        <Button onClick={openBookingForm}>Create a new Booking</Button>
+      </div>
+      {isBookingFormOpen && <BookingForm onSubmit={handleBookingFormSubmit} />}
     </>
   );
 }

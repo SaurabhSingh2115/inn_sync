@@ -92,6 +92,7 @@ const Amount = styled.div`
 function Bookings() {
   const [bookings, setBookings] = useState([]);
   const [isBookingFormOpen, setIsBookingFormOpen] = useState(false);
+  const [refresh, setRefresh] = useState(true);
 
   const openBookingForm = () => {
     setIsBookingFormOpen(true);
@@ -102,17 +103,19 @@ function Bookings() {
   };
 
   useEffect(() => {
-    // Fetch bookings data from the API
-    axios
-      .get("https://inn-sync-ug12.onrender.com/bookings")
-      .then((response) => {
-        console.log("Received data:", response.data);
-        setBookings(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching bookings:", error);
-      });
-  }, []);
+    if (refresh) {
+      axios
+        .get("https://inn-sync-ug12.onrender.com/bookings")
+        .then((response) => {
+          console.log("Received data:", response.data);
+          setBookings(response.data);
+          setRefresh(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching bookings:", error);
+        });
+    }
+  }, [refresh]);
 
   function deleteBooking(id) {
     if (window.confirm("Are you sure you want to delete this booking?"))
@@ -120,8 +123,7 @@ function Bookings() {
         .delete(`https://inn-sync-ug12.onrender.com/bookings/${id}`)
         .then((response) => {
           console.log("Deleted booking:", response.data);
-          // Remove the deleted booking from the state
-          setBookings(bookings.filter((booking) => booking.id !== id));
+          setRefresh(true);
         })
         .catch((error) => {
           console.error("Error deleting booking:", error);
@@ -134,11 +136,21 @@ function Bookings() {
     "checked-out": "silver",
   };
 
-  const handleBookingFormSubmit = (event) => {
-    event.preventDefault();
-    // Handle the form submission here
-    // After handling, close the form
-    closeBookingForm();
+  const handleBookingFormSubmit = async (bookingData) => {
+    try {
+      const response = await axios.post(
+        "https://inn-sync-ug12.onrender.com/bookings",
+        bookingData
+      );
+      if (response.status === 200) {
+        setRefresh(true);
+        closeBookingForm();
+      } else {
+        console.error("Error creating booking:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error creating booking:", error);
+    }
   };
 
   return (

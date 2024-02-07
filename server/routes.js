@@ -23,7 +23,7 @@ const guestSchema = new mongoose.Schema({
 });
 
 const bookingSchema = new mongoose.Schema({
-  id: String,
+  bookingId: String, // Use bookingId instead of id
   startDate: Date,
   endDate: Date,
   numNights: Number,
@@ -43,14 +43,7 @@ const Booking = mongoose.model("Booking", bookingSchema);
 // Middleware to parse JSON body in requests
 app.use(express.json());
 // app.use(cors());
-
-const allowedOrigins = ["https://inn-sync.netlify.app"];
-app.use(
-  cors({
-    origin: allowedOrigins,
-  })
-);
-
+app.use(cors());
 //In memory database for Cabins
 let cabins = [
   {
@@ -131,7 +124,7 @@ let cabins = [
 
 let bookings = [
   {
-    id: "1",
+    bookingId: "1",
     startDate: "2024-02-07",
     endDate: "2024-02-12",
     numNights: 4,
@@ -142,7 +135,7 @@ let bookings = [
     cabins: { name: "Cabin 1" },
   },
   {
-    id: "2",
+    bookingId: "2",
     startDate: "2024-02-10",
     endDate: "2024-02-15",
     numNights: 5,
@@ -153,7 +146,7 @@ let bookings = [
     cabins: { name: "Cabin 2" },
   },
   {
-    id: "3",
+    bookingId: "3",
     startDate: "2024-02-15",
     endDate: "2024-02-21",
     numNights: 6,
@@ -164,7 +157,7 @@ let bookings = [
     cabins: { name: "Cabin 3" },
   },
   {
-    id: "4",
+    bookingId: "4",
     startDate: "2024-02-14",
     endDate: "2024-02-16",
     numNights: 2,
@@ -175,7 +168,7 @@ let bookings = [
     cabins: { name: "Cabin 4" },
   },
   {
-    id: "5",
+    bookingId: "5",
     startDate: "2024-02-20",
     endDate: "2024-02-26",
     numNights: 5,
@@ -478,27 +471,34 @@ app.delete("/cabins/:name", async (req, res) => {
   res.status(204).send();
 });
 
-//Bookings
+// Get all bookings
 app.get("/bookings", async (req, res) => {
   const bookings = await Booking.find();
   res.json(bookings);
 });
 
-app.get("/bookings/:id", async (req, res) => {
-  const booking = await Booking.findOne({ id: req.params.id });
+// Get a booking by bookingId
+app.get("/bookings/:bookingId", async (req, res) => {
+  const booking = await Booking.findOne({ bookingId: req.params.bookingId });
   if (!booking) res.status(404).send("Booking not found");
   res.json(booking);
 });
 
+// Create a new booking
 app.post("/bookings", async (req, res) => {
   const booking = new Booking(req.body);
-  await booking.save();
-  res.status(201).send(booking);
+  const result = await booking.save();
+  if (result) {
+    res.status(201).send(result);
+  } else {
+    res.status(500).send("Error creating booking.");
+  }
 });
 
-app.put("/bookings/:id", async (req, res) => {
+// Update a booking by bookingId
+app.put("/bookings/:bookingId", async (req, res) => {
   const booking = await Booking.findOneAndUpdate(
-    { id: req.params.id },
+    { bookingId: req.params.bookingId },
     req.body,
     { new: true }
   );
@@ -506,9 +506,16 @@ app.put("/bookings/:id", async (req, res) => {
   res.json(booking);
 });
 
-app.delete("/bookings/:id", async (req, res) => {
-  await Booking.findOneAndDelete({ id: req.params.id });
-  res.status(204).send();
+// Delete a booking by bookingId
+app.delete("/bookings/:bookingId", async (req, res) => {
+  const result = await Booking.findOneAndDelete({
+    bookingId: req.params.bookingId,
+  });
+  if (result) {
+    res.status(204).send();
+  } else {
+    res.status(404).send("Booking not found");
+  }
 });
 // Check In/Out
 app.get("/checkIn/:id", (req, res) => {

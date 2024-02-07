@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import BookingForm from "../features/bookings/BookingForm";
+import Button from "../ui/Button";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 import styled from "styled-components";
@@ -51,8 +53,8 @@ const TableRow = styled.div`
     padding: 1rem;
 
     /* & div:nth-child(3) {
-      text-align: left;
-    } */
+        text-align: left;
+      } */
   }
 `;
 
@@ -89,24 +91,66 @@ const Amount = styled.div`
 
 function Bookings() {
   const [bookings, setBookings] = useState([]);
+  const [isBookingFormOpen, setIsBookingFormOpen] = useState(false);
+  const [refresh, setRefresh] = useState(true);
+
+  const openBookingForm = () => {
+    setIsBookingFormOpen(true);
+  };
+
+  const closeBookingForm = () => {
+    setIsBookingFormOpen(false);
+  };
 
   useEffect(() => {
-    // Fetch bookings data from the API
-    axios
-      .get("https://inn-sync-ug12.onrender.com/bookings")
-      .then((response) => {
-        console.log("Received data:", response.data);
-        setBookings(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching bookings:", error);
-      });
-  }, []);
+    if (refresh) {
+      axios
+        .get("https://inn-sync-ug12.onrender.com/bookings")
+        .then((response) => {
+          console.log("Received data:", response.data);
+          setBookings(response.data);
+          setRefresh(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching bookings:", error);
+        });
+    }
+  }, [refresh]);
+
+  function deleteBooking(bookingId) {
+    if (window.confirm("Are you sure you want to delete this booking?"))
+      axios
+        .delete(`https://inn-sync-ug12.onrender.com/bookings/${bookingId}`)
+        .then((response) => {
+          console.log("Deleted booking:", response.data);
+          setRefresh(true);
+        })
+        .catch((error) => {
+          console.error("Error deleting booking:", error);
+        });
+  }
 
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
     "checked-out": "silver",
+  };
+
+  const handleBookingFormSubmit = async (bookingData) => {
+    try {
+      const response = await axios.post(
+        "https://inn-sync-ug12.onrender.com/bookings",
+        bookingData
+      );
+      if (response.status === 200) {
+        setRefresh(true);
+        closeBookingForm();
+      } else {
+        console.error("Error creating booking:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error creating booking:", error);
+    }
   };
 
   return (
@@ -127,7 +171,7 @@ function Bookings() {
         </TableHeader>
 
         {bookings.map((booking) => (
-          <TableRow key={booking.id}>
+          <TableRow key={booking.bookingId}>
             <Cabin>{booking.cabins?.name}</Cabin>
 
             <Stacked>
@@ -166,10 +210,18 @@ function Bookings() {
             </Tag>
 
             <Amount>{`${booking.totalPrice}`}</Amount>
-            <div></div>
+            <div>
+              <Button onClick={() => deleteBooking(booking.bookingId)}>
+                Delete
+              </Button>
+            </div>
           </TableRow>
         ))}
       </Table>
+      <div>
+        <Button onClick={openBookingForm}>Create a new Booking</Button>
+      </div>
+      {isBookingFormOpen && <BookingForm onSubmit={handleBookingFormSubmit} />}
     </>
   );
 }

@@ -117,10 +117,10 @@ function Bookings() {
     }
   }, [refresh]);
 
-  function deleteBooking(id) {
+  function deleteBooking(bookingId) {
     if (window.confirm("Are you sure you want to delete this booking?"))
       axios
-        .delete(`https://inn-sync-ug12.onrender.com/bookings/${id}`)
+        .delete(`https://inn-sync-ug12.onrender.com/bookings/${bookingId}`)
         .then((response) => {
           console.log("Deleted booking:", response.data);
           setRefresh(true);
@@ -171,7 +171,7 @@ function Bookings() {
         </TableHeader>
 
         {bookings.map((booking) => (
-          <TableRow key={booking.id}>
+          <TableRow key={booking.bookingId}>
             <Cabin>{booking.cabins?.name}</Cabin>
 
             <Stacked>
@@ -211,7 +211,9 @@ function Bookings() {
 
             <Amount>{`${booking.totalPrice}`}</Amount>
             <div>
-              <Button onClick={() => deleteBooking(booking.id)}>Delete</Button>
+              <Button onClick={() => deleteBooking(booking.bookingId)}>
+                Delete
+              </Button>
             </div>
           </TableRow>
         ))}

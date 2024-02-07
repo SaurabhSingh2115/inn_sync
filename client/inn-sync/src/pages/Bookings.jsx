@@ -51,8 +51,8 @@ const TableRow = styled.div`
     padding: 1rem;
 
     /* & div:nth-child(3) {
-      text-align: left;
-    } */
+        text-align: left;
+      } */
   }
 `;
 

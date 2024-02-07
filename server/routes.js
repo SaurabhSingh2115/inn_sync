@@ -43,14 +43,7 @@ const Booking = mongoose.model("Booking", bookingSchema);
 // Middleware to parse JSON body in requests
 app.use(express.json());
 // app.use(cors());
-
-const allowedOrigins = ["https://inn-sync.netlify.app"];
-app.use(
-  cors({
-    origin: allowedOrigins,
-  })
-);
-
+app.use(cors());
 //In memory database for Cabins
 let cabins = [
   {

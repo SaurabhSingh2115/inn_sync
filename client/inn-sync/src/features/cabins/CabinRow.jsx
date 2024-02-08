@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Button from "../../ui/Button";
 // import image from "../data/cabins/cabin-001.jpg";
 
 // import { formatCurrency } from "../../utils/helpers";
@@ -48,6 +49,11 @@ const Description = styled.div`
   color: var(--color-grey-600);
 `;
 
+const CustomButton = styled(Button)`
+  padding: 8px 12px; // Adjust as needed
+  font-size: 1.4rem; // Adjust as needed
+`;
+
 // , description
 function CabinRow({ cabin }) {
   const { name, maxCapacity, regularPrice, discount, image } = cabin;
@@ -60,7 +66,7 @@ function CabinRow({ cabin }) {
       <Price>{regularPrice}</Price>
       <Discount>{discount}</Discount>
       {/* <Description>{description}</Description> */}
-      <button>Delete</button>
+      <CustomButton>Delete</CustomButton>
     </TableRow>
   );
 }

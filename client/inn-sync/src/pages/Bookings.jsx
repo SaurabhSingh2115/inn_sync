@@ -6,6 +6,7 @@ import Row from "../ui/Row";
 import styled from "styled-components";
 import Tag from "../ui/Tag";
 import axios from "axios";
+import Pagination from "../ui/Pagination";
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -53,8 +54,8 @@ const TableRow = styled.div`
     padding: 1rem;
 
     /* & div:nth-child(3) {
-        text-align: left;
-      } */
+          text-align: left;
+        } */
   }
 `;
 
@@ -89,8 +90,20 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
+const ButtonContainer = styled.div`
+  position: relative;
+  margin-top: 1.6rem;
+  padding-right: 2.4rem;
+`;
+const CreateBookingButton = styled(Button)`
+  position: absolute;
+  right: 0;
+`;
+
+const PAGE_SIZE = 10;
 function Bookings() {
   const [bookings, setBookings] = useState([]);
+  const [totalBookingsCount, setTotalBookingsCount] = useState(0);
   const [isBookingFormOpen, setIsBookingFormOpen] = useState(false);
   const [refresh, setRefresh] = useState(true);
 
@@ -104,26 +117,30 @@ function Bookings() {
 
   useEffect(() => {
     if (refresh) {
+      // Add this line
       axios
-        .get("https://inn-sync-ug12.onrender.com/bookings")
+        .get(`${import.meta.env.VITE_RENDER_API_URL}/bookings`)
         .then((response) => {
           console.log("Received data:", response.data);
           setBookings(response.data);
-          setRefresh(false);
+          setTotalBookingsCount(response.data.length);
+          setRefresh(false); // Add this line
         })
         .catch((error) => {
           console.error("Error fetching bookings:", error);
         });
     }
-  }, [refresh]);
+  }, [refresh]); // Modify this line
 
   function deleteBooking(bookingId) {
     if (window.confirm("Are you sure you want to delete this booking?"))
       axios
-        .delete(`https://inn-sync-ug12.onrender.com/bookings/${bookingId}`)
+        .delete(`${import.meta.env.VITE_RENDER_API_URL}/bookings/${bookingId}`)
         .then((response) => {
           console.log("Deleted booking:", response.data);
-          setRefresh(true);
+          // Remove the deleted booking from the state
+          setBookings(bookings.filter((booking) => booking._id !== bookingId));
+          setRefresh(true); // Add this line
         })
         .catch((error) => {
           console.error("Error deleting booking:", error);
@@ -139,11 +156,11 @@ function Bookings() {
   const handleBookingFormSubmit = async (bookingData) => {
     try {
       const response = await axios.post(
-        "https://inn-sync-ug12.onrender.com/bookings",
+        `${import.meta.env.VITE_RENDER_API_URL}/bookings`,
         bookingData
       );
       if (response.status === 200) {
-        setRefresh(true);
+        // setRefresh(true);
         closeBookingForm();
       } else {
         console.error("Error creating booking:", response.statusText);
@@ -219,7 +236,15 @@ function Bookings() {
         ))}
       </Table>
       <div>
-        <Button onClick={openBookingForm}>Create a new Booking</Button>
+        <Pagination count={15} />
+      </div>
+
+      <div>
+        <ButtonContainer>
+          <CreateBookingButton onClick={openBookingForm}>
+            Create a new Booking
+          </CreateBookingButton>{" "}
+        </ButtonContainer>
       </div>
       {isBookingFormOpen && <BookingForm onSubmit={handleBookingFormSubmit} />}
     </>

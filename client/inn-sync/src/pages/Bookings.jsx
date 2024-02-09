@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import BookingForm from "../features/bookings/BookingForm";
 import Button from "../ui/Button";
 import Heading from "../ui/Heading";
@@ -106,6 +107,10 @@ function Bookings() {
   const [totalBookingsCount, setTotalBookingsCount] = useState(0);
   const [isBookingFormOpen, setIsBookingFormOpen] = useState(false);
   const [refresh, setRefresh] = useState(true);
+  const [searchParams] = useSearchParams();
+  const currentPage = !searchParams.get("page")
+    ? 1
+    : Number(searchParams.get("page"));
 
   const openBookingForm = () => {
     setIsBookingFormOpen(true);
@@ -161,6 +166,7 @@ function Bookings() {
       );
       if (response.status === 200) {
         // setRefresh(true);
+        setBookings((prevBookings) => [...prevBookings, response.data]);
         closeBookingForm();
       } else {
         console.error("Error creating booking:", response.statusText);
@@ -187,56 +193,58 @@ function Bookings() {
           <div></div>
         </TableHeader>
 
-        {bookings.map((booking) => (
-          <TableRow key={booking.bookingId}>
-            <Cabin>{booking.cabins?.name}</Cabin>
+        {bookings
+          .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+          .map((booking) => (
+            <TableRow key={booking.bookingId}>
+              <Cabin>{booking.cabins?.name}</Cabin>
 
-            <Stacked>
-              <span>{booking.guests?.fullName}</span>
-              <span>{booking.guests?.email}</span>
-            </Stacked>
+              <Stacked>
+                <span>{booking.guests?.fullName}</span>
+                <span>{booking.guests?.email}</span>
+              </Stacked>
 
-            <Stacked>
-              <span>
-                {new Date(booking.startDate).toDateString() ===
-                new Date().toDateString()
-                  ? "Today"
-                  : `${Math.ceil(
-                      (new Date(booking.startDate) - new Date()) /
-                        (1000 * 60 * 60 * 24)
-                    )} days from now`}{" "}
-                → {booking.numNights} night stay
-              </span>
-              <span>
-                {new Date(booking.startDate).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "2-digit",
-                  year: "numeric",
-                })}{" "}
-                —{" "}
-                {new Date(booking.endDate).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "2-digit",
-                  year: "numeric",
-                })}
-              </span>
-            </Stacked>
+              <Stacked>
+                <span>
+                  {new Date(booking.startDate).toDateString() ===
+                  new Date().toDateString()
+                    ? "Today"
+                    : `${Math.ceil(
+                        (new Date(booking.startDate) - new Date()) /
+                          (1000 * 60 * 60 * 24)
+                      )} days from now`}{" "}
+                  → {booking.numNights} night stay
+                </span>
+                <span>
+                  {new Date(booking.startDate).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                  })}{" "}
+                  —{" "}
+                  {new Date(booking.endDate).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "2-digit",
+                    year: "numeric",
+                  })}
+                </span>
+              </Stacked>
 
-            <Tag type={statusToTagName[booking.status]}>
-              {booking.status.replace("-", " ")}
-            </Tag>
+              <Tag type={statusToTagName[booking.status]}>
+                {booking.status.replace("-", " ")}
+              </Tag>
 
-            <Amount>{`${booking.totalPrice}`}</Amount>
-            <div>
-              <Button onClick={() => deleteBooking(booking.bookingId)}>
-                Delete
-              </Button>
-            </div>
-          </TableRow>
-        ))}
+              <Amount>{`${booking.totalPrice}`}</Amount>
+              <div>
+                <Button onClick={() => deleteBooking(booking.bookingId)}>
+                  Delete
+                </Button>
+              </div>
+            </TableRow>
+          ))}
       </Table>
       <div>
-        <Pagination count={15} />
+        <Pagination count={totalBookingsCount} />
       </div>
 
       <div>

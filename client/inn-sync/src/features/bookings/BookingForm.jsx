@@ -1,4 +1,3 @@
-// BookingForm.jsx
 import React, { useState } from "react";
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
@@ -7,6 +6,7 @@ import Input from "../../ui/Input";
 
 function BookingForm({ onSubmit }) {
   const [booking, setBooking] = useState({
+    bookingId: "",
     startDate: "",
     endDate: "",
     numNights: "",
@@ -40,6 +40,15 @@ function BookingForm({ onSubmit }) {
 
   return (
     <Form onSubmit={handleSubmit}>
+      <FormRow label="Booking ID" error={""}>
+        <Input
+          type="text"
+          id="bookingId"
+          value={booking.bookingId}
+          onChange={handleChange}
+        />
+      </FormRow>
+
       <FormRow label="Start Date" error={""}>
         <Input
           type="date"

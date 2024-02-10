@@ -1,8 +1,16 @@
-# Inn_Sync
+##Inn_Sync
 
 Inn Sync is a user friendly project that addresses the challenge of effectively managing a hotel by streamlining various operations through a web-based platform. This innovative solution tackles the complexities associated with tasks like user check-ins and check-outs, sales statistics, and other related processes. By offering a centralized system, the project aims to enhance efficiency, improve guest experiences, and optimize overall hotel management.
 
-## Key Features
+### Demo video link:- https://drive.google.com/file/d/1lam4CO6MOCr47Y64ewWkE9BLhg_3uwPH/view?usp=sharing
+
+### Frontend deployment link:- https://inn-sync.netlify.app/
+
+### Backend deployment link:- https://inn-sync-ug12.onrender.com/
+
+### API Documentation:- https://documenter.getpostman.com/view/32409759/2s9YymHkUC
+
+### Key Features
 
 - Dashboard
 
@@ -46,9 +54,3 @@ Inn Sync is a user friendly project that addresses the challenge of effectively 
 - Dark mode.
 
   - Users are able to switch between Light and Dark Mode.
-
-### API Documentation:- https://documenter.getpostman.com/view/32409759/2s9YymHkUC
-
-### Netlify deployment link:- https://inn-sync.netlify.app/
-
-### Render deployment link:- https://inn-sync-ug12.onrender.com/

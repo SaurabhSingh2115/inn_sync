@@ -1,4 +1,4 @@
-##Inn_Sync
+## Inn_Sync
 
 Inn Sync is a user friendly project that addresses the challenge of effectively managing a hotel by streamlining various operations through a web-based platform. This innovative solution tackles the complexities associated with tasks like user check-ins and check-outs, sales statistics, and other related processes. By offering a centralized system, the project aims to enhance efficiency, improve guest experiences, and optimize overall hotel management.
 

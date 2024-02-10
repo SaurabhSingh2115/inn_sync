@@ -1,18 +1,12 @@
-// import { useQuery } from "@tanstack/react-query";
-import CabinRow from "./CabinRow";
-import cabinImage1 from "../../data/cabins/cabin-001.jpg";
-import cabinImage2 from "../../data/cabins/cabin-002.jpg";
-import cabinImage3 from "../../data/cabins/cabin-003.jpg";
-import cabinImage4 from "../../data/cabins/cabin-004.jpg";
-import cabinImage5 from "../../data/cabins/cabin-005.jpg";
-import cabinImage6 from "../../data/cabins/cabin-006.jpg";
-import cabinImage7 from "../../data/cabins/cabin-007.jpg";
-import cabinImage8 from "../../data/cabins/cabin-008.jpg";
+// import necessary modules
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
+import CabinRow from "./CabinRow";
 
+// styled components
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
-
   font-size: 1.4rem;
   background-color: var(--color-grey-0);
   border-radius: 7px;
@@ -24,7 +18,6 @@ const TableHeader = styled.header`
   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
   column-gap: 2.4rem;
   align-items: center;
-
   background-color: var(--color-grey-50);
   border-bottom: 1px solid var(--color-grey-100);
   text-transform: uppercase;
@@ -34,85 +27,42 @@ const TableHeader = styled.header`
   padding: 1.6rem 2.4rem;
 `;
 
-function CabinTable() {
-  // Replace this with your actual data
-  const cabins = [
-    {
-      name: "01",
-      maxCapacity: 4,
-      regularPrice: 1000,
-      discount: 200,
-      image: cabinImage1,
-      // description:
-      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
-    },
+// main component
+function Cabins() {
+  const [cabins, setCabins] = useState([]);
+  const [refresh, setRefresh] = useState(true);
 
-    {
-      name: "02",
-      maxCapacity: 6,
-      regularPrice: 1200,
-      discount: 300,
-      image: cabinImage2,
-      // description:
-      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
-    },
-    {
-      name: "03",
-      maxCapacity: 2,
-      regularPrice: 800,
-      discount: 100,
-      image: cabinImage3,
-      // description:
-      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
-    },
-    {
-      name: "04",
-      maxCapacity: 4,
-      regularPrice: 1300,
-      discount: 300,
-      image: cabinImage4,
-      // description:
-      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
-    },
-    {
-      name: "05",
-      maxCapacity: 5,
-      regularPrice: 1400,
-      discount: 200,
-      image: cabinImage5,
-      // description:
-      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
-    },
-    {
-      name: "06",
-      maxCapacity: 6,
-      regularPrice: 1500,
-      discount: 500,
-      image: cabinImage6,
-      // description:
-      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
-    },
-    {
-      name: "07",
-      maxCapacity: 7,
-      regularPrice: 2000,
-      discount: 700,
-      image: cabinImage7,
-      // description:
-      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
-    },
-    {
-      name: "08",
-      maxCapacity: 8,
-      regularPrice: 3000,
-      discount: 800,
-      image: cabinImage8,
-      // description:
-      //   "Discover the ultimate luxury getaway for couples in the cozy wooden cabin 001. Nestled in a picturesque forest, this stunning cabin offers a secluded and intimate retreat. Inside, enjoy modern high-quality wood interiors, a comfortable seating area, a fireplace and a fully-equipped kitchen. The plush king-size bed, dressed in fine linens guarantees a peaceful nights sleep. Relax in the spa-like shower and unwind on the private deck with hot tub.",
-    },
+  useEffect(() => {
+    if (refresh) {
+      axios
+        .get(`${import.meta.env.VITE_RENDER_API_URL}/cabins`)
+        .then((response) => {
+          console.log("Received data:", response.data);
+          setCabins(response.data);
+          setRefresh(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching cabins:", error);
+        });
+    }
+  }, [refresh]);
 
-    // add more cabins as needed
-  ];
+  function deleteCabin(cabinName) {
+    if (window.confirm("Are you sure you want to delete this cabin?")) {
+      axios
+        .delete(`${import.meta.env.VITE_RENDER_API_URL}/cabins/${cabinName}`)
+        .then((response) => {
+          console.log("Deleted cabin:", response.data);
+          setCabins((prevCabins) =>
+            prevCabins.filter((cabin) => cabin.name !== cabinName)
+          );
+          setRefresh(false);
+        })
+        .catch((error) => {
+          console.error("Error deleting cabin:", error);
+        });
+    }
+  }
 
   return (
     <Table role="table">
@@ -124,10 +74,14 @@ function CabinTable() {
         <div>Discount</div>
       </TableHeader>
       {cabins.map((cabin, index) => (
-        <CabinRow key={index} cabin={cabin} />
+        <CabinRow
+          key={index}
+          cabin={cabin}
+          onDelete={() => deleteCabin(cabin.name)}
+        />
       ))}
     </Table>
   );
 }
 
-export default CabinTable;
+export default Cabins;

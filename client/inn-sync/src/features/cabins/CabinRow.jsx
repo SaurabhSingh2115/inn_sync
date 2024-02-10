@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Button from "../../ui/Button";
-// import image from "../data/cabins/cabin-001.jpg";
+// import imageUrl from "../data/cabins/cabin-001.jpg";
 
 // import { formatCurrency } from "../../utils/helpers";
 
@@ -15,7 +15,6 @@ const TableRow = styled.div`
     border-bottom: 1px solid var(--color-grey-100);
   }
 `;
-
 const Img = styled.img`
   display: block;
   width: 6.4rem;
@@ -55,18 +54,17 @@ const CustomButton = styled(Button)`
 `;
 
 // , description
-function CabinRow({ cabin }) {
-  const { name, maxCapacity, regularPrice, discount, image } = cabin;
+function CabinRow({ cabin, onDelete }) {
+  const { name, maxCapacity, regularPrice, discount, imageUrl } = cabin;
 
   return (
     <TableRow role="row">
-      <Img src={image} alt="CabinImage" />
+      <Img src={imageUrl} alt="CabinImage" />
       <Cabin>{name}</Cabin>
-      <div>Fits upto {maxCapacity} guests</div>
+      <div>Fits up to {maxCapacity} guests</div>
       <Price>{regularPrice}</Price>
       <Discount>{discount}</Discount>
-      {/* <Description>{description}</Description> */}
-      <CustomButton>Delete</CustomButton>
+      <CustomButton onClick={onDelete}>Delete</CustomButton>
     </TableRow>
   );
 }

@@ -1,0 +1,50 @@
+function Cabins() {
+  const [cabins, setCabins] = useState([]);
+  const [refresh, setRefresh] = useState(true);
+
+  useEffect(() => {
+    if (refresh) {
+      axios
+        .get(`${import.meta.env.VITE_RENDER_API_URL}/cabins`)
+        .then((response) => {
+          console.log("Received data:", response.data);
+          setCabins(response.data);
+          setRefresh(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching cabins:", error);
+        });
+    }
+  }, [refresh]);
+
+  function deleteCabin(cabinId) {
+    if (window.confirm("Are you sure you want to delete this cabin?"))
+      axios
+        .delete(`${import.meta.env.VITE_RENDER_API_URL}/cabins/${cabinId}`)
+        .then((response) => {
+          console.log("Deleted cabin:", response.data);
+          setCabins(cabins.filter((cabin) => cabin._id !== cabinId));
+          setRefresh(true);
+        })
+        .catch((error) => {
+          console.error("Error deleting cabin:", error);
+        });
+  }
+
+  return (
+    <Table role="table">
+      <TableHeader role="row">
+        <div></div>
+        <div>Cabin</div>
+        <div>Capacity</div>
+        <div>Price</div>
+        <div>Discount</div>
+      </TableHeader>
+      {cabins.map((cabin, index) => (
+        <CabinRow key={index} cabin={cabin} onDelete={deleteCabin} />
+      ))}
+    </Table>
+  );
+}
+
+export default Cabins;

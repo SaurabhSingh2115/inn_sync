@@ -4,16 +4,6 @@ import axios from "axios";
 import styled from "styled-components";
 import CabinRow from "./CabinRow";
 
-// import images
-import cabinImage1 from "../../data/cabins/cabin-001.jpg";
-import cabinImage2 from "../../data/cabins/cabin-002.jpg";
-import cabinImage3 from "../../data/cabins/cabin-003.jpg";
-import cabinImage4 from "../../data/cabins/cabin-004.jpg";
-import cabinImage5 from "../../data/cabins/cabin-005.jpg";
-import cabinImage6 from "../../data/cabins/cabin-006.jpg";
-import cabinImage7 from "../../data/cabins/cabin-007.jpg";
-import cabinImage8 from "../../data/cabins/cabin-008.jpg";
-
 // styled components
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -57,18 +47,21 @@ function Cabins() {
     }
   }, [refresh]);
 
-  function deleteCabin(cabinId) {
-    if (window.confirm("Are you sure you want to delete this cabin?"))
+  function deleteCabin(cabinName) {
+    if (window.confirm("Are you sure you want to delete this cabin?")) {
       axios
-        .delete(`${import.meta.env.VITE_RENDER_API_URL}/cabins/${cabinId}`)
+        .delete(`${import.meta.env.VITE_RENDER_API_URL}/cabins/${cabinName}`)
         .then((response) => {
           console.log("Deleted cabin:", response.data);
-          setCabins(cabins.filter((cabin) => cabin._id !== cabinId));
-          setRefresh(true);
+          setCabins((prevCabins) =>
+            prevCabins.filter((cabin) => cabin.name !== cabinName)
+          );
+          setRefresh(false);
         })
         .catch((error) => {
           console.error("Error deleting cabin:", error);
         });
+    }
   }
 
   return (
@@ -81,7 +74,11 @@ function Cabins() {
         <div>Discount</div>
       </TableHeader>
       {cabins.map((cabin, index) => (
-        <CabinRow key={index} cabin={cabin} onDelete={deleteCabin} />
+        <CabinRow
+          key={index}
+          cabin={cabin}
+          onDelete={() => deleteCabin(cabin.name)}
+        />
       ))}
     </Table>
   );

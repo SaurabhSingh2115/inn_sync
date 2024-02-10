@@ -15,7 +15,7 @@ const TableRow = styled.div`
     border-bottom: 1px solid var(--color-grey-100);
   }
 `;
-
+cd;
 const Img = styled.img`
   display: block;
   width: 6.4rem;

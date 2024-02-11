@@ -4,7 +4,7 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
-
+import Spinner from "../../ui/Spinner";
 function SettingsForm() {
   const [settings, setSettings] = useState({
     minNights: "",
@@ -59,6 +59,7 @@ function SettingsForm() {
           id="maxNights"
           value={settings.maxNights}
           onChange={handleChange}
+          min={0}
         />
       </FormRow>
 
@@ -68,6 +69,7 @@ function SettingsForm() {
           id="maxGuests"
           value={settings.maxGuests}
           onChange={handleChange}
+          min={0}
         />
       </FormRow>
 
@@ -77,6 +79,7 @@ function SettingsForm() {
           id="breakfastPrice"
           value={settings.breakfastPrice}
           onChange={handleChange}
+          min={0}
         />
       </FormRow>
 

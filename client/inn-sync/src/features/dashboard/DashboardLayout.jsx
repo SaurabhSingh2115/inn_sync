@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import SalesChart from "./SalesChart";
+import DurationChart from "./DurationChart";
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -8,6 +10,23 @@ const StyledDashboardLayout = styled.div`
   gap: 2.4rem;
 `;
 
+const confirmedStays = [
+  { numNights: 1 },
+  { numNights: 2 },
+  { numNights: 2 },
+  { numNights: 3 },
+  { numNights: 4 },
+  { numNights: 5 },
+  { numNights: 5 },
+  { numNights: 6 },
+  { numNights: 7 },
+  { numNights: 8 },
+  { numNights: 9 },
+  { numNights: 10 },
+  { numNights: 15 },
+  { numNights: 21 },
+  { numNights: 22 },
+];
 /*
 We need to distinguish between two types of data here:
 1) BOOKINGS: the actual sales. For example, in the last 30 days, the hotel might have sold 10 bookings online, but these guests might only arrive and check in in the far future (or not, as booking also happen on-site)
@@ -19,7 +38,7 @@ function DashboardLayout() {
     <StyledDashboardLayout>
       <div>Statistics</div>
       <div>Today's activity</div>
-      <div>Chart stay durations</div>
+      <DurationChart confirmedStays={confirmedStays} />
       <>
         <SalesChart />
       </>

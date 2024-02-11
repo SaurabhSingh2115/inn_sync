@@ -3,6 +3,7 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+import Dropdown from "../../ui/Dropdown";
 
 function BookingForm({ onSubmit }) {
   const [booking, setBooking] = useState({
@@ -95,12 +96,11 @@ function BookingForm({ onSubmit }) {
       </FormRow>
 
       <FormRow label="Status" error={""}>
-        <Input
-          type="text"
-          id="status"
-          value={booking.status}
-          onChange={handleChange}
-        />
+        <Dropdown id="status" value={booking.status} onChange={handleChange}>
+          <option value="unconfirmed">Unconfirmed</option>
+          <option value="checked-in">Checked In</option>
+          <option value="checked-out">Checked Out</option>
+        </Dropdown>
       </FormRow>
 
       <FormRow label="Guest Full Name" error={""}>

@@ -35,11 +35,18 @@ const bookingSchema = new mongoose.Schema({
   cabins: { name: String },
 });
 
+const settingsSchema = new mongoose.Schema({
+  minNights: Number,
+  maxNights: Number,
+  maxGuests: Number,
+  breakfastPrice: Number,
+});
 // Connect to the MongoDB database
 
 const Cabin = mongoose.model("Cabin", cabinSchema);
 const Guest = mongoose.model("Guest", guestSchema);
 const Booking = mongoose.model("Booking", bookingSchema);
+const Settings = mongoose.model("Settings", settingsSchema);
 
 // Middleware to parse JSON body in requests
 app.use(express.json());
@@ -475,6 +482,9 @@ let guests = [
   },
 ];
 
+let settings = [
+  { minNights: 1, maxNights: 10, maxGuests: 8, breakfastPrice: 50 },
+];
 //connection
 
 connectDB()
@@ -504,6 +514,14 @@ connectDB()
       for (let guestData of guests) {
         const guest = new Guest(guestData);
         await guest.save();
+      }
+    }
+
+    const existingSettings = await Settings.find();
+    if (existingSettings.length === 0) {
+      for (let settingData of settings) {
+        const setting = new Settings(settingData);
+        await setting.save();
       }
     }
   })
@@ -647,14 +665,27 @@ app.delete("/guests/:fullName", async (req, res) => {
   await Guest.findOneAndDelete({ fullName: req.params.fullName });
   res.status(204).send();
 });
-// Settings and customization
 
-app.get("/settings", (req, res) => {
-  res.send("hello from guests");
+// Get settings
+app.get("/settings", async (req, res) => {
+  let settings = await Settings.find();
+  if (!settings.length) {
+    // If no settings are found in the database, use the default settings
+    settings = await Settings.create(settings);
+  }
+  res.json(settings);
 });
 
-app.put("/settings", (req, res) => {
-  res.send("Successfully customized the settings");
+// Update settings
+app.put("/settings", async (req, res) => {
+  let updatedSettings = await Settings.findOneAndUpdate({}, req.body, {
+    new: true,
+  });
+  if (!updatedSettings) {
+    // If no settings are found in the database, create new settings with the provided data
+    updatedSettings = await Settings.create(req.body);
+  }
+  res.json(updatedSettings);
 });
 
 // Dark mode

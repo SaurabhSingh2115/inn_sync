@@ -1,59 +1,90 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+import Button from "../../ui/Button";
 
-const sampleSettings = {
-  minNights: 1,
-  maxNights: 10,
-  maxGuests: 8,
-  breakfastPrice: 50,
-};
+function SettingsForm() {
+  const [settings, setSettings] = useState({
+    minNights: "",
+    maxNights: "",
+    maxGuests: "",
+    breakfastPrice: "",
+  });
+  const [refresh, setRefresh] = useState(true);
 
-function UpdateSettingsForm({ settings = sampleSettings }) {
-  const [breakfastPrice, setBreakfastPrice] = useState(settings.breakfastPrice);
+  useEffect(() => {
+    if (refresh) {
+      axios
+        .get(`${import.meta.env.VITE_RENDER_API_URL}/settings`)
+        .then((response) => {
+          setSettings(response.data);
+          setRefresh(false);
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+  }, [refresh]);
 
-  const handleBreakfastPriceClick = () => {
-    setBreakfastPrice((prevPrice) => prevPrice + 5);
+  const handleChange = (event) => {
+    setSettings({ ...settings, [event.target.id]: event.target.value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    axios
+      .put(`${import.meta.env.VITE_RENDER_API_URL}/settings`, settings)
+      .then((response) => {
+        console.log("Success:", response.data);
+        setRefresh(true);
+      })
+      .catch((error) => console.error("Error:", error));
   };
 
   return (
-    <Form>
-      <FormRow label="Minimum nights/booking">
+    <Form onSubmit={handleSubmit}>
+      <FormRow label="Minimum Nights">
         <Input
           type="number"
-          id="min-nights"
-          min="0"
-          defaultValue={settings.minNights}
+          id="minNights"
+          value={settings.minNights}
+          onChange={handleChange}
         />
       </FormRow>
-      <FormRow label="Maximum nights/booking">
+
+      <FormRow label="Maximum Nights">
         <Input
           type="number"
-          id="max-nights"
-          min="0"
-          defaultValue={settings.maxNights}
+          id="maxNights"
+          value={settings.maxNights}
+          onChange={handleChange}
         />
       </FormRow>
-      <FormRow label="Maximum guests/booking">
+
+      <FormRow label="Maximum Guests">
         <Input
           type="number"
-          id="max-guests"
-          min="0"
-          defaultValue={settings.maxGuests}
+          id="maxGuests"
+          value={settings.maxGuests}
+          onChange={handleChange}
         />
       </FormRow>
-      <FormRow label="Breakfast price">
+
+      <FormRow label="Breakfast Price">
         <Input
           type="number"
-          id="breakfast-price"
-          min="0"
-          value={breakfastPrice}
-          onClick={handleBreakfastPriceClick}
+          id="breakfastPrice"
+          value={settings.breakfastPrice}
+          onChange={handleChange}
         />
+      </FormRow>
+
+      <FormRow>
+        <Button type="submit">Update Settings</Button>
       </FormRow>
     </Form>
   );
 }
 
-export default UpdateSettingsForm;
+export default SettingsForm;

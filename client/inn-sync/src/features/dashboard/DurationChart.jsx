@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Heading from "../../ui/Heading";
+
 import {
   Cell,
   Legend,
@@ -9,6 +10,8 @@ import {
   Tooltip,
 } from "recharts";
 import { useDarkMode } from "../../context/DarkModeContext";
+
+import useConfirmedStays from "../../hooks/useConfirmedStays";
 const ChartBox = styled.div`
   /* Box */
   background-color: var(--color-grey-0);
@@ -19,9 +22,7 @@ const ChartBox = styled.div`
   grid-column: 3 / span 2;
 
   /* Add a fixed height */
-  height: 400px;
-
-  & > *:first-child {
+  */ & > *:first-child {
     margin-bottom: 1.6rem;
   }
 
@@ -51,32 +52,32 @@ const startDataLight = [
   },
   {
     duration: "2 nights",
-    value: 2,
+    value: 0,
     color: "#f97316",
   },
   {
     duration: "3 nights",
-    value: 5,
+    value: 0,
     color: "#eab308",
   },
   {
     duration: "4-5 nights",
-    value: 3,
+    value: 0,
     color: "#84cc16",
   },
   {
     duration: "6-7 nights",
-    value: 7,
+    value: 0,
     color: "#22c55e",
   },
   {
     duration: "8-14 nights",
-    value: 5,
+    value: 0,
     color: "#14b8a6",
   },
   {
     duration: "15-21 nights",
-    value: 8,
+    value: 0,
     color: "#3b82f6",
   },
   {
@@ -156,32 +157,15 @@ function prepareData(startData, stays) {
   return data;
 }
 
-const confirmedStays = [
-  { numNights: 1 },
-  { numNights: 2 },
-  { numNights: 2 },
-  { numNights: 3 },
-  { numNights: 4 },
-  { numNights: 5 },
-  { numNights: 5 },
-  { numNights: 6 },
-  { numNights: 7 },
-  { numNights: 8 },
-  { numNights: 9 },
-  { numNights: 10 },
-  { numNights: 15 },
-  { numNights: 21 },
-  { numNights: 22 },
-];
-
-function DurationChart({ confirmedStays }) {
+function DurationChart() {
   const { isDarkMode } = useDarkMode();
+  const confirmedStays = useConfirmedStays();
   const startData = isDarkMode ? startDataDark : startDataLight;
   const data = prepareData(startData, confirmedStays);
   return (
     <ChartBox>
       <Heading as="h2">Stay duration summary</Heading>
-      <ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={240}>
         <PieChart>
           <Pie
             data={data}

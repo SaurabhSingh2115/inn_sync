@@ -14,24 +14,6 @@ const StyledDashboardLayout = styled.div`
   gap: 2.4rem;
 `;
 
-// const confirmedStays = [
-//   { numNights: 1 },
-//   { numNights: 2 },
-//   { numNights: 2 },
-//   { numNights: 3 },
-//   { numNights: 4 },
-//   { numNights: 5 },
-//   { numNights: 5 },
-//   { numNights: 6 },
-//   { numNights: 7 },
-//   { numNights: 8 },
-//   { numNights: 9 },
-//   { numNights: 10 },
-//   { numNights: 15 },
-//   { numNights: 21 },
-//   { numNights: 22 },
-// ];
-
 const numDays = 30;
 const cabinCount = 8;
 /*

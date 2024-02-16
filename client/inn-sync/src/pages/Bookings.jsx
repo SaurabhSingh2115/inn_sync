@@ -8,7 +8,6 @@ import styled from "styled-components";
 import Tag from "../ui/Tag";
 import axios from "axios";
 import Pagination from "../ui/Pagination";
-
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
   font-size: 1.4rem;
@@ -55,8 +54,8 @@ const TableRow = styled.div`
     padding: 1rem;
 
     /* & div:nth-child(3) {
-          text-align: left;
-        } */
+            text-align: left;
+          } */
   }
 `;
 

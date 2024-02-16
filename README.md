@@ -2,7 +2,7 @@
 
 Inn Sync is a user friendly project that addresses the challenge of effectively managing a hotel by streamlining various operations through a web-based platform. This innovative solution tackles the complexities associated with tasks like user check-ins and check-outs, sales statistics, and other related processes. By offering a centralized system, the project aims to enhance efficiency, improve guest experiences, and optimize overall hotel management.
 
-### Demo video link:- https://drive.google.com/file/d/1lam4CO6MOCr47Y64ewWkE9BLhg_3uwPH/view?usp=sharing
+### Demo video link:- https://drive.google.com/file/d/1walpYVEv6d7TjQNBq5SSomYJIm645OMb/view?usp=drive_link
 
 ### Frontend deployment link:- https://inn-sync.netlify.app/
 
@@ -19,23 +19,27 @@ Inn Sync is a user friendly project that addresses the challenge of effectively 
   - Statistics on recent bookings, sales, check-ins, and occupancy rate.
   - A chart showing all daily hotel sales, showing both "total" sales and "extras" sales.
   - A representaion showing statistics on stay durations.
+    ![Alt text]https://i.imgur.com/RuzyXqP.png
 
 - Authentication and Authorization
 
   - Users of the app are hotel employees. They can logged in into the application to perform tasks.
   - Ensuring only actual hotel employees can get accounts.
   - Users able to upload an avatar, and change their name and password
+    ![Alt text]https://i.imgur.com/3FRlSF4.png
 
 - Cabins
 
   - Tabled view with all cabins, showing the cabin photo, name, capacity, price, and current discount.
   - Users are able to update, delete or create new cabins.
+    ![Alt text]https://i.imgur.com/KOQmXvS.png
 
 - Bookings
 
   - The app has a tabled view with all the bookings, showing their arrival and departure dates, status, and paid amount, as well as cabin and guest data.
   - The booking status can filtered by "unconfirmed", "checked in", or "checked out" status.
   - Other booking data includes: the number of guests, number of nights, guest observations, whether they booked breakfast, breakfast price.
+    ![Alt test]https://i.imgur.com/8VFZRBA.png
 
 - Check In/Out
 
@@ -50,6 +54,7 @@ Inn Sync is a user friendly project that addresses the challenge of effectively 
 - Settings and customization
 
   - Users are able to define a few application-wide settings: breakfast price, min and max nights/booking, max guests/booking etc.
+    ![]https://i.imgur.com/dyX04kd.png
 
 - Dark mode.
 

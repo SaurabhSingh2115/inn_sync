@@ -55,7 +55,7 @@ Inn Sync is a user friendly project that addresses the challenge of effectively 
 - Settings and customization
 
   - Users are able to define a few application-wide settings: breakfast price, min and max nights/booking, max guests/booking etc.
-    ![]https://i.imgur.com/dyX04kd.png
+    ![hotelSettings](https://github.com/codinggita/inn_sync/assets/92015232/3b7b2741-c2fa-4d84-aa7a-238607ec5a86)
 
 - Dark mode.
 

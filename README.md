@@ -19,27 +19,28 @@ Inn Sync is a user friendly project that addresses the challenge of effectively 
   - Statistics on recent bookings, sales, check-ins, and occupancy rate.
   - A chart showing all daily hotel sales, showing both "total" sales and "extras" sales.
   - A representaion showing statistics on stay durations.
-    ![]https://i.imgur.com/RuzyXqP.png
+    ![Dashboard](https://github.com/codinggita/inn_sync/assets/92015232/8d67aa9b-a552-41bb-8be6-129e2ac9c6ad)
+
 
 - Authentication and Authorization
 
   - Users of the app are hotel employees. They can logged in into the application to perform tasks.
   - Ensuring only actual hotel employees can get accounts.
   - Users able to upload an avatar, and change their name and password
-    ![]https://i.imgur.com/3FRlSF4.png
+    ![Users](https://github.com/codinggita/inn_sync/assets/92015232/422ccf38-90f3-451f-a5a1-fd4df4b1d79f)
 
 - Cabins
 
   - Tabled view with all cabins, showing the cabin photo, name, capacity, price, and current discount.
   - Users are able to update, delete or create new cabins.
-    ![]https://i.imgur.com/KOQmXvS.png
+    ![Cabins](https://github.com/codinggita/inn_sync/assets/92015232/f91f7d64-b802-4dcd-a70d-4e94ee7fe2e6)
 
 - Bookings
 
   - The app has a tabled view with all the bookings, showing their arrival and departure dates, status, and paid amount, as well as cabin and guest data.
   - The booking status can filtered by "unconfirmed", "checked in", or "checked out" status.
   - Other booking data includes: the number of guests, number of nights, guest observations, whether they booked breakfast, breakfast price.
-    ![]https://i.imgur.com/8VFZRBA.png
+    ![Bookings](https://github.com/codinggita/inn_sync/assets/92015232/1000c9ee-39e5-4515-8df6-127fc009b00f)
 
 - Check In/Out
 
